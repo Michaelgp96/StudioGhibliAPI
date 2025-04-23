@@ -1,0 +1,63 @@
+/* En src/Componentes/Listar/style.css (o como se llame tu archivo CSS para Listar) */
+
+/* Estilo para el campo de búsqueda */
+.c-buscador {
+    display: block; /* Para que ocupe su propia línea */
+    width: 80%; /* Ancho del buscador */
+    max-width: 500px; /* Ancho máximo */
+    margin: 20px auto; /* Centrar el buscador y darle espacio */
+    padding: 10px 15px; /* Padding interno */
+    font-size: 1rem;
+    border: 1px solid #555; /* Borde sutil */
+    background-color: #222; /* Fondo oscuro para el input */
+    color: white; /* Texto blanco */
+    border-radius: 5px; /* Bordes redondeados */
+  }
+  
+  /* Contenedor principal de la lista de películas */
+  .c-lista {
+    display: grid; /* Usar Grid Layout para mostrar las películas en columnas */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Columnas automáticas que se adaptan */
+    gap: 20px; /* Espacio entre las tarjetas de película */
+    padding: 20px; /* Padding alrededor de la cuadrícula */
+    padding-bottom: 100px; /* Padding inferior para dejar espacio sobre el menú (ajusta este valor) */
+    max-width: 1200px; /* Ancho máximo para la sección de la lista */
+    margin: 0 auto; /* Centrar la sección de la lista */
+  }
+  
+  /* Estilo para cada tarjeta de película individual */
+  .c-lista-pelicula { /* Asegúrate que esta es la clase que usas en Listar.jsx */
+    background-color: #1a1a1a; /* Fondo ligeramente diferente para la tarjeta */
+    border: 1px solid #333; /* Borde sutil para la tarjeta */
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 15px;
+    text-align: center; /* Centrar el texto dentro de la tarjeta */
+    cursor: pointer; /* Indicar que es clickeable */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Transición suave */
+  }
+  
+  .c-lista-pelicula:hover {
+    transform: translateY(-5px); /* Efecto sutil al pasar el ratón */
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1); /* Sombra blanca sutil */
+  }
+  
+  /* Estilo para las imágenes dentro de cada tarjeta */
+  .c-lista-pelicula img {
+    display: block; /* Para poder centrar con márgenes automáticos */
+    margin: 0 auto 10px auto; /* Centrar imagen y añadir espacio debajo */
+    max-width: 100%; /* Asegurar que la imagen no se salga de la tarjeta */
+    height: auto; /* Mantener proporción */
+    border-radius: 4px; /* Redondear esquinas de la imagen si se desea */
+  }
+  
+  /* Estilo para el texto (título) dentro de cada tarjeta */
+  .c-lista-pelicula p {
+    margin: 0; /* Quitar márgenes por defecto del párrafo */
+    font-weight: bold;
+    color: #eee; /* Color de texto ligeramente más claro */
+  }
+  
+  /* Si tienes el año u otro texto, puedes darle estilo específico */
+  .c-lista-pelicula p:first-of-type { /* Asumiendo que el título es el primer <p> */
+     margin-bottom: 5px; /* Espacio entre título y año si lo pones */
+  }

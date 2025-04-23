@@ -1,6 +1,7 @@
 // En Listar.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import './style.css'
 // import Filtro from "../Filtros"; // Ya no lo necesitamos aquí por ahora
 
 function Listar() {

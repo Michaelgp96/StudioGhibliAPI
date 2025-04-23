@@ -1,0 +1,63 @@
+/* En src/Componentes/Detalle/style.css */
+
+/* Estilo para el contenedor principal del detalle */
+.c-detalle-pelicula {
+    background-color: black; /* 1. Color de fondo negro */
+    color: white; /* Cambiar color del texto para que sea legible sobre fondo negro */
+    padding: 20px; /* Añadir algo de padding general */
+    padding-bottom: 100px; /* 3. Añadir padding en la parte inferior (ajusta este valor según necesites para que no choque con tu menú) */
+    min-height: calc(100vh - YOUR_HEADER_HEIGHT); /* Opcional: Asegura que el fondo negro ocupe al menos la altura de la pantalla menos la cabecera si la tienes fija */
+    box-sizing: border-box; /* Buena práctica incluir esto */
+  }
+  
+  /* Estilo para las imágenes dentro del contenedor */
+  .c-detalle-pelicula img {
+    display: block; /* Necesario para poder usar márgenes automáticos para centrar */
+    margin-left: auto; /* 2. Centrar la imagen horizontalmente */
+    margin-right: auto; /* 2. Centrar la imagen horizontalmente */
+    max-width: 80%; /* Evita que las imágenes muy grandes se salgan del contenedor */
+    height: auto; /* Mantiene la proporción de la imagen */
+    margin-top: 15px; /* Espacio arriba de la imagen */
+    margin-bottom: 15px; /* Espacio debajo de la imagen */
+  }
+  
+  /* Puedes añadir estilos específicos para el texto si quieres */
+  .c-detalle-pelicula h2 {
+    text-align: center; /* Centrar el título principal si lo deseas */
+    margin-bottom: 10px;
+  }
+  
+  .c-detalle-pelicula h4 {
+    text-align: center; /* Centrar subtítulos */
+    color: #ccc; /* Un gris claro para el subtítulo */
+    margin-bottom: 20px;
+  }
+  
+  .c-detalle-pelicula p {
+    line-height: 1.6; /* Mejorar legibilidad del texto */
+    margin-bottom: 10px; /* Espacio entre párrafos */
+    max-width: 800px; /* Limitar ancho de párrafos largos para mejor lectura */
+    margin-left: auto; /* Centrar bloque de texto si el ancho es limitado */
+    margin-right: auto; /* Centrar bloque de texto si el ancho es limitado */
+    text-align: justify; /* Justificar texto de descripción puede verse bien */
+  }
+  
+  .c-detalle-pelicula p strong {
+      color: #a0a0a0; /* Diferenciar un poco los labels en negrita */
+  }
+  
+  /* --- NOTA IMPORTANTE --- */
+  /* Si el fondo negro no cubre toda la página como esperas,
+     es posible que necesites aplicar 'background-color: black;'
+     al 'body' en tu archivo CSS principal (como index.css o App.css)
+     en lugar o además de aplicarlo a '.c-detalle-pelicula'. */
+  
+  /* Ejemplo para index.css o App.css si fuera necesario */
+  /*
+  body {
+    background-color: black;
+    color: white;
+    margin: 0;
+    font-family: sans-serif; // Define una fuente base
+  }
+  */

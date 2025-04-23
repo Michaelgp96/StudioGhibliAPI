@@ -1,0 +1,7 @@
+/* En src/index.css o src/App.css */
+body {
+    background-color: black;
+    color: white; /* Color de texto por defecto para toda la app */
+    margin: 0; /* Quita márgenes por defecto del body */
+    font-family: sans-serif; /* Opcional: define una fuente base */
+  }
