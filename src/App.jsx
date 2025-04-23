@@ -21,7 +21,7 @@ function App() {
         <Route path="/Aleatorio" element={<Aleatorio />} />
         <Route path="/Original" element={<Original />} />
         <Route path="/Favoritos" element={<Favoritos />} />
-        <Route path="/Detalle/:name" element={<Detalle />} />
+        <Route path="/Detalle/:id" element={<Detalle />} />
       </Routes>
 
     </Router>

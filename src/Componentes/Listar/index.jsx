@@ -1,83 +1,75 @@
+// En Listar.jsx
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; 
-import Filtro from "../Filtros";
+import { useNavigate } from "react-router-dom";
+// import Filtro from "../Filtros"; // Ya no lo necesitamos aquí por ahora
 
 function Listar() {
-  const [data, setData] = useState([]); // Estado para almacenar los datos de Pokémon
-  const [busqueda, setBusqueda] = useState(''); // Estado para almacenar la búsqueda
-  const [tipoSeleccionado, setTipoSeleccionado] = useState('All'); // Estado para el tipo de Pokémon
-  const navigate = useNavigate(); // Hook para la navegación
-  
-  
-  // useEffect que se ejecuta cuando tipoSeleccionado cambia
+  const [films, setFilms] = useState([]); // Renombrar estado para claridad
+  const [busqueda, setBusqueda] = useState('');
+  // const [tipoSeleccionado, setTipoSeleccionado] = useState('All'); // Ya no es necesario
+  const navigate = useNavigate();
+
+  // useEffect para obtener las películas de Ghibli
   useEffect(() => {
-    const obtenerDatos = async () => {
-      let url = "https://pokeapi.co/api/v2/pokemon?limit=1025"; // URL base para obtener todos los Pokémon
-
-      // Si se ha seleccionado un tipo específico, modificamos la URL para buscar por tipo
-      if (tipoSeleccionado !== 'All') {
-        url = `https://pokeapi.co/api/v2/type/${tipoSeleccionado}`;
-      }
-
-      const res = await fetch(url);
-      const json = await res.json();
-      if (tipoSeleccionado === 'All') {
-        setData(json.results); // Guarda los datos de Pokémon si no hay filtro de tipo
-      } else {
-        // Si hay un filtro de tipo, extraemos solo los Pokémon del tipo seleccionado
-        const listaFiltrada = json.pokemon.map(p => p.pokemon); 
-        setData(listaFiltrada); 
+    const obtenerPeliculas = async () => {
+      try { // Buena práctica: usar try...catch para manejo de errores
+        const url = "https://ghibliapi.vercel.app/films"; // URL de la API Ghibli
+        const res = await fetch(url);
+        if (!res.ok) { // Verificar si la respuesta fue exitosa
+           throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        const data = await res.json();
+        setFilms(data); // Ghibli API devuelve directamente el array de películas
+      } catch (error) {
+        console.error("Error fetching Ghibli films:", error);
+        // Aquí podrías setear un estado de error para mostrarlo en la UI
       }
     };
 
-    obtenerDatos(); 
-  }, [tipoSeleccionado]); 
+    obtenerPeliculas();
+  }, []); // Ejecutar solo una vez al montar el componente
 
-  const handleTipoChange = (tipo) => {
-    setTipoSeleccionado(tipo); 
-  };
-
-  let resultados = data;
-
-  if (busqueda.length >= 3 && isNaN(busqueda)) {
-    resultados = data.filter(pokemon =>
-      pokemon.name.toLowerCase().includes(busqueda.toLowerCase())
+  // --- Lógica de Búsqueda (Adaptar si es necesario) ---
+  // La búsqueda actual busca en 'pokemon.name'. Necesitas adaptarla para 'film.title'.
+  let resultados = films;
+  if (busqueda.length >= 1) { // Buscar por título
+    resultados = films.filter(film =>
+      film.title.toLowerCase().includes(busqueda.toLowerCase())
     );
   }
-  if (!isNaN(busqueda)) {
-    resultados = data.filter(pokemon =>
-      pokemon.url.includes('/' + busqueda)
-    );
-  }
+   // La búsqueda por ID (isNaN) probablemente no aplique igual aquí, considerar quitarla o adaptarla si Ghibli tiene IDs numéricos buscables.
 
+  // --- Adaptar el Renderizado ---
   return (
     <>
-     <input
+      <input
         type="text"
-        placeholder="Buscar Pokémon"
+        placeholder="Buscar Película de Ghibli por título" // Actualizar placeholder
         value={busqueda}
         onChange={(e) => setBusqueda(e.target.value)}
-        className="c-buscador"
+        className="c-buscador" // Mantener o cambiar clase CSS si es necesario
       />
-      <Filtro onTipoChange={handleTipoChange} /> {}
-      <section className='c-lista'>
-        {/* Mapea los datos y muestra los Pokémon */}
-        {resultados.map((pokemon, index) => (
-          <div 
-            className='c-lista-pokemon'
-            onClick={() => navigate(`/detalle/${pokemon.name}`)} // Redirige al detalle del Pokémon
-            key={index}
+      {/* <Filtro onTipoChange={handleTipoChange} />  Quitamos el filtro de tipos */}
+      <section className='c-lista'> {/* Mantener o cambiar clase CSS */}
+        {resultados.map((film) => ( // Iterar sobre 'films'
+          <div
+            className='c-lista-pelicula' // Cambiar clase CSS si quieres estilos diferentes
+            // Para navegar al detalle, Ghibli usa 'id' (un UUID string), no 'name'.
+            // Asegúrate que tu ruta /detalle/:id pueda manejar esto.
+            onClick={() => navigate(`/detalle/${film.id}`)}
+            key={film.id} // Usar el 'id' único de la película como key
           >
-            {/* Extrae el ID del Pokémon desde la URL para usarlo en la imagen */}
-            <p>{pokemon.url.split("/")[6]}</p>
-            <img 
-              src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.url.split("/")[6]}.png`} 
-              alt={`Pokémon ${pokemon.name}`} 
-              width='200' 
-              height='200' 
-              loading='lazy'
+            {/* Mostrar datos relevantes de la película */}
+            <p><strong>{film.title}</strong> ({film.release_date})</p>
+            <img
+               src={film.image} // Ghibli API provee una URL de imagen directamente
+               alt={`Poster de ${film.title}`}
+               width='500' // Ajustar tamaño si es necesario
+               // height='...' // Puedes quitar height para mantener proporción
+               loading='lazy'
             />
-            <p>{pokemon.name}</p>
+             {/* <p>Director: {film.director}</p> */}
+             {/* Puedes añadir más info si quieres */}
           </div>
         ))}
       </section>
