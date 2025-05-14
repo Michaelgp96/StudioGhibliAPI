@@ -1,0 +1,76 @@
+/* src/Componentes/Locaciones/style.css */
+
+.c-locaciones-container {
+  padding: 20px;
+  padding-bottom: 100px; /* Espacio para el menú */
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.c-locaciones-titulo-principal {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2.5rem;
+  color: #e0e0e0;
+}
+
+.c-lista-locaciones.c-lista-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Tarjetas un poco más anchas */
+  gap: 25px;
+}
+
+.c-tarjeta-locacion {
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 10px;
+  padding: 20px;
+  /* cursor: pointer; // Habilitar si se implementa la navegación a detalle */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Descomentar si se habilita la navegación
+.c-tarjeta-locacion:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(233, 233, 233, 0.15);
+}
+*/
+
+.c-tarjeta-locacion-nombre {
+  font-size: 1.6rem; /* Un poco más grande para el nombre de la locación */
+  color: #81d4fa; /* Un color distintivo para el nombre */
+  margin-bottom: 15px;
+  text-align: center;
+  min-height: 2.2em; /* Para alinear nombres */
+}
+
+.c-tarjeta-locacion-info p {
+  font-size: 0.95rem;
+  color: #ccc;
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.c-tarjeta-locacion-info p strong {
+  color: #e0e0e0;
+  margin-right: 5px;
+}
+
+/* Estilos para estados de carga y error (pueden ser globales) */
+/* Si ya los tienes definidos en otro CSS y App.css los importa, no necesitas repetirlos.
+.c-estado-carga,
+.c-estado-error,
+.c-lista-vacia-ghibli {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 1.2rem;
+  color: #aaa;
+}
+
+.c-estado-error {
+  color: #ff6b6b;
+}
+*/

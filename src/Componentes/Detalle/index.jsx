@@ -1,44 +1,42 @@
 // src/Componentes/Detalle/index.jsx
-import { useState, useEffect, useContext } from "react"; // useContext añadido
-import { useParams, Link } from "react-router-dom"; // Link añadido por si lo necesitamos
-import './style.css';
-import { GhibliContext } from '../../Contexto/GhibliContext'; // 1. Importar el Contexto
+import React, { useState, useEffect, useContext } from "react";
+import { useParams, Link } from "react-router-dom";
+import './style.css'; // Tus estilos existentes
+import { GhibliContext } from '../../Contexto/GhibliContext';
 
 function Detalle() {
-  const { id: filmIdFromParams } = useParams(); // Renombrar 'id' para evitar confusión con ids de film
+  const { id: filmIdFromParams } = useParams();
 
-  // 2. Consumir el estado de las películas del contexto
-  const { films, loadingFilms, errorFilms } = useContext(GhibliContext);
+  // 1. Consumir las nuevas funciones y el estado de favoritos del contexto
+  const {
+    films, loadingFilms, errorFilms, // Estados existentes para la lista de películas
+    addFilmToFavoritos,               // Nueva función para añadir a favoritos
+    removeFilmFromFavoritos,          // Nueva función para quitar de favoritos
+    isFilmInFavoritos                 // Nueva función para verificar si es favorito
+  } = useContext(GhibliContext);
 
   const [filmDetail, setFilmDetail] = useState(null);
-  // El estado 'loading' y 'error' local ahora dependerá más del estado del contexto
-  // y de si encontramos la película.
   const [localLoading, setLocalLoading] = useState(true);
   const [localError, setLocalError] = useState(null);
 
+  // Variable para saber si la película actual es favorita
+  const esFavoritaActual = filmDetail ? isFilmInFavoritos(filmDetail.id) : false;
+
   useEffect(() => {
-    setLocalLoading(true); // Iniciar carga local
-    setLocalError(null);   // Resetear error local
-    setFilmDetail(null);   // Resetear detalle
+    setLocalLoading(true);
+    setLocalError(null);
+    setFilmDetail(null);
 
     if (loadingFilms) {
-      // Si el contexto aún está cargando las películas, no hacemos nada más aquí,
-      // esperamos a que el contexto termine. El renderizado condicional se encargará.
-      // Mantenemos localLoading en true.
       return;
     }
-
     if (errorFilms) {
-      // Si hubo un error al cargar las películas en el contexto, lo reflejamos localmente.
       setLocalError(`Error general al cargar datos de películas: ${errorFilms}`);
       setLocalLoading(false);
       return;
     }
-
-    // Si las películas del contexto ya se cargaron y no hay error general:
     if (films && films.length > 0) {
       const foundFilm = films.find(film => film.id === filmIdFromParams);
-
       if (foundFilm) {
         setFilmDetail(foundFilm);
         setLocalError(null);
@@ -46,46 +44,56 @@ function Detalle() {
         setLocalError(`No se encontró una película con el ID: ${filmIdFromParams}`);
       }
     } else if (!loadingFilms) {
-      // Films no está cargando, pero el array 'films' está vacío o no existe (y no hubo errorFilms)
       setLocalError("No hay datos de películas disponibles en el contexto.");
     }
-    setLocalLoading(false); // La búsqueda local (o intento) ha terminado
+    setLocalLoading(false);
+  }, [filmIdFromParams, films, loadingFilms, errorFilms]);
 
-    // 3. ELIMINAR el fetch individual que estaba aquí.
-    //    La lógica ahora se basa en encontrar la película en los 'films' del contexto.
-    /*
-    const obtenerDetallePelicula = async () => {
-      // ... lógica de fetch individual anterior ...
-    };
-    obtenerDetallePelicula();
-    */
+  // 2. Handler para el botón de favoritos
+  const handleToggleFavorito = () => {
+    if (!filmDetail) return; // No hacer nada si no hay detalles de la película
 
-  }, [filmIdFromParams, films, loadingFilms, errorFilms]); // Dependencias del efecto
+    if (esFavoritaActual) {
+      removeFilmFromFavoritos(filmDetail.id);
+    } else {
+      // Pasamos el objeto filmDetail completo para que se guarde en la lista de favoritos
+      // con toda la info necesaria (id, title, image, etc.)
+      addFilmToFavoritos(filmDetail);
+    }
+  };
 
-  // --- Renderizado Condicional ---
-  if (localLoading || loadingFilms) { // Considerar también loadingFilms del contexto
+  if (localLoading || loadingFilms) {
     return <div className="c-detalle-mensaje">Cargando detalles de la película...</div>;
   }
-
   if (localError) {
     return <div className="c-detalle-mensaje c-detalle-error">Error: {localError}</div>;
   }
-
   if (!filmDetail) {
     return <div className="c-detalle-mensaje">No se encontraron detalles para esta película.</div>;
   }
 
-  // --- Renderizado de los Detalles (tu código existente, prácticamente sin cambios) ---
   return (
     <div className="c-detalle-pelicula">
-      <h2>{filmDetail.title} ({filmDetail.release_date})</h2>
+      {/* Contenedor para título y botón de favorito */}
+      <div className="c-detalle-cabecera">
+        <h2>{filmDetail.title} ({filmDetail.release_date})</h2>
+        {/* 3. Botón para añadir/quitar de favoritos */}
+        <button
+          onClick={handleToggleFavorito}
+          className={`c-boton-favorito ${esFavoritaActual ? 'favorito-activo' : ''}`}
+          aria-label={esFavoritaActual ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+        >
+          {esFavoritaActual ? '❤️ Quitar de Favoritos' : '🤍 Añadir a Favoritos'}
+        </button>
+      </div>
+
       <h4>{filmDetail.original_title} / {filmDetail.original_title_romanised}</h4>
 
       {filmDetail.movie_banner && (
         <img
           src={filmDetail.movie_banner}
           alt={`Banner de ${filmDetail.title}`}
-          className="c-detalle-imagen-banner" // Añadida clase para diferenciar del poster
+          className="c-detalle-imagen-banner"
         />
       )}
 
@@ -95,30 +103,14 @@ function Detalle() {
       <p className="c-detalle-descripcion"><strong>Descripción:</strong> {filmDetail.description}</p>
 
       {filmDetail.image && (!filmDetail.movie_banner || filmDetail.movie_banner === filmDetail.image) && (
-        // Mostrar poster si no hay banner, o si el banner es la misma imagen que el poster
-        // (algunas películas en la API usan la misma URL para image y movie_banner)
         <img
           src={filmDetail.image}
           alt={`Poster de ${filmDetail.title}`}
-          className="c-detalle-imagen-poster" // Añadida clase
+          className="c-detalle-imagen-poster"
         />
       )}
-      
-      {/* Aquí es donde podríamos empezar a listar Personajes, Locaciones, etc.
-        que están vinculados a esta película. Por ejemplo:
-        <h3>Personajes:</h3>
-        <ul>
-          {filmDetail.people && filmDetail.people.map(personUrl => {
-            // Aquí necesitaríamos una forma de obtener el nombre del personaje a partir de su URL
-            // o tener los datos de todos los personajes en el contexto.
-            // Por ahora, solo mostraremos la URL o un ID extraído.
-            const personId = personUrl.split('/').pop();
-            return <li key={personId}><Link to={`/personajes/${personId}`}>Personaje ID: {personId}</Link></li>;
-          })}
-          {(!filmDetail.people || filmDetail.people.length === 0 || filmDetail.people[0].includes("TODO")) && <li>No hay personajes específicos listados para esta película.</li>}
-        </ul>
-        (Similar para locations, species, vehicles)
-      */}
+
+      {/* ... (resto del JSX, como la sección de personajes si la tenías) ... */}
     </div>
   );
 }

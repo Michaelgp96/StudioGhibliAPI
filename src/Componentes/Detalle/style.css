@@ -46,18 +46,65 @@
       color: #a0a0a0; /* Diferenciar un poco los labels en negrita */
   }
   
-  /* --- NOTA IMPORTANTE --- */
-  /* Si el fondo negro no cubre toda la página como esperas,
-     es posible que necesites aplicar 'background-color: black;'
-     al 'body' en tu archivo CSS principal (como index.css o App.css)
-     en lugar o además de aplicarlo a '.c-detalle-pelicula'. */
-  
-  /* Ejemplo para index.css o App.css si fuera necesario */
-  /*
-  body {
-    background-color: black;
-    color: white;
-    margin: 0;
-    font-family: sans-serif; // Define una fuente base
+ /* En src/Componentes/Detalle/style.css (añadir o modificar) */
+
+/* ... (tus estilos existentes para .c-detalle-pelicula, h2, h4, img, p, etc.) ... */
+
+.c-detalle-cabecera {
+  display: flex; /* Para alinear título y botón */
+  justify-content: space-between; /* Espacio entre título y botón */
+  align-items: center; /* Alinear verticalmente */
+  margin-bottom: 10px; /* Espacio debajo de la cabecera */
+  flex-wrap: wrap; /* Permitir que el botón pase abajo en pantallas pequeñas */
+}
+
+.c-detalle-cabecera h2 {
+  margin-bottom: 0; /* Quitar margen inferior del h2 si está en flex */
+  margin-right: 20px; /* Espacio a la derecha del título */
+}
+
+.c-boton-favorito {
+  background-color: #4a4a4a;
+  color: white;
+  border: 1px solid #666;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  white-space: nowrap; /* Evitar que el texto del botón se parta */
+}
+
+.c-boton-favorito:hover {
+  background-color: #5a5a5a;
+}
+
+.c-boton-favorito:active {
+  transform: scale(0.95);
+}
+
+.c-boton-favorito.favorito-activo {
+  background-color: #e53935; /* Un color rojo para indicar activo */
+  border-color: #c62828;
+}
+
+.c-boton-favorito.favorito-activo:hover {
+  background-color: #d32f2f;
+}
+
+/* Asegúrate que tus otros estilos no entren en conflicto.
+   Por ejemplo, si .c-detalle-pelicula h2 tenía text-align: center,
+   y ahora está en un flex container, podrías necesitar ajustar
+   .c-detalle-cabecera o .c-detalle-cabecera h2 para el alineamiento deseado.
+   Si quieres que el h2 siga centrado sobre el botón en móviles:
+*/
+@media (max-width: 600px) {
+  .c-detalle-cabecera {
+    flex-direction: column; /* Apilar en móviles */
+    align-items: center; /* Centrar elementos apilados */
   }
-  */
+  .c-detalle-cabecera h2 {
+    margin-right: 0;
+    margin-bottom: 10px; /* Espacio entre título y botón en móvil */
+  }
+}
