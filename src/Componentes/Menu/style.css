@@ -1,13 +1,25 @@
-.c-menu{
-    background-color: silver;
-    flex-wrap: wrap;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    width: 100%;
-    padding: 15px;
+/* En src/Componentes/Menu/style.css (añadir) */
+
+/* ... tus estilos existentes para .c-menu, .c-menu-lista, .c-menu-item, .c-menu-enlace ... */
+
+.c-menu-loading { /* Estilo para el mensaje de carga del menú si decides usarlo */
+  color: #ccc;
+  width: 100%;
+  text-align: center;
+}
+
+.c-menu-boton-logout {
+  background: none;
+  border: none;
+  color: white; /* O el color de tus otros enlaces */
+  cursor: pointer;
+  padding: 0; /* Ajusta si es necesario */
+  font-size: inherit; /* Para que coincida con otros NavLinks */
+  font-family: inherit;
+  /* Aplica los mismos estilos que .c-menu-enlace si quieres que se vea igual */
+}
+
+.c-menu-boton-logout:hover {
+  text-decoration: underline; /* O el efecto hover de tus otros enlaces */
+  color: #b3e5fc; /* Ejemplo de color hover */
 }

@@ -15,6 +15,9 @@ import Menu from './Componentes/Menu';
 import Personajes from './Componentes/Personajes';
 import PersonajeDetalle from './Componentes/PersonajeDetalle';
 import Locaciones from './Componentes/Locaciones';
+import Login from './Componentes/Auth/Login';
+import Registro from './Componentes/Auth/Registro';
+
 
 function App() {
   return (
@@ -32,6 +35,9 @@ function App() {
           <Route path="/Locaciones" element={<Locaciones />} />
           <Route path="/personajes/:id" element={<PersonajeDetalle />} />
           <Route path="/Detalle/:id" element={<Detalle />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/registro" element={<Registro />} />
+          
 
         </Routes>
       </Router>
