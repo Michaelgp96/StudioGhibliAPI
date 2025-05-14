@@ -13,6 +13,7 @@ import Favoritos from './Componentes/Favoritos';
 import Usuario from './Componentes/Usuario';
 import Menu from './Componentes/Menu';
 import Personajes from './Componentes/Personajes';
+import PersonajeDetalle from './Componentes/PersonajeDetalle';
 
 function App() {
   return (
@@ -27,7 +28,9 @@ function App() {
           <Route path="/Original" element={<Original />} />
           <Route path="/Favoritos" element={<Favoritos />} />
           <Route path="/Personajes" element={<Personajes />} />
+          <Route path="/personajes/:id" element={<PersonajeDetalle />} />
           <Route path="/Detalle/:id" element={<Detalle />} />
+
         </Routes>
       </Router>
     </GhibliProvider>

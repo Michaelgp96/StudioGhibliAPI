@@ -11,6 +11,8 @@ function Menu() {
           <Link to="/Usuario">Usuario</Link>
           <Link to="/Favoritos">Favoritos</Link>
           <Link to="/Personajes">Personajes</Link>
+          
+
         </nav>
     )
   }
