@@ -1,87 +1,124 @@
-// En src/Componentes/Detalle/index.jsx
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import './style.css'; // Asegúrate que los estilos siguen siendo adecuados o ajústalos
+// src/Componentes/Detalle/index.jsx
+import { useState, useEffect, useContext } from "react"; // useContext añadido
+import { useParams, Link } from "react-router-dom"; // Link añadido por si lo necesitamos
+import './style.css';
+import { GhibliContext } from '../../Contexto/GhibliContext'; // 1. Importar el Contexto
 
 function Detalle() {
-  const [filmDetail, setFilmDetail] = useState(null); // Inicializar como null
-  const [loading, setLoading] = useState(true); // Estado para la carga
-  const [error, setError] = useState(null); // Estado para errores
-  const { id } = useParams(); // Obtener el 'id' de la URL (asegúrate que la ruta en App.jsx sea /detalle/:id)
+  const { id: filmIdFromParams } = useParams(); // Renombrar 'id' para evitar confusión con ids de film
+
+  // 2. Consumir el estado de las películas del contexto
+  const { films, loadingFilms, errorFilms } = useContext(GhibliContext);
+
+  const [filmDetail, setFilmDetail] = useState(null);
+  // El estado 'loading' y 'error' local ahora dependerá más del estado del contexto
+  // y de si encontramos la película.
+  const [localLoading, setLocalLoading] = useState(true);
+  const [localError, setLocalError] = useState(null);
 
   useEffect(() => {
-    // Resetear estados al cambiar de ID
-    setLoading(true);
-    setError(null);
-    setFilmDetail(null);
+    setLocalLoading(true); // Iniciar carga local
+    setLocalError(null);   // Resetear error local
+    setFilmDetail(null);   // Resetear detalle
 
-    const obtenerDetallePelicula = async () => {
-      try {
-        const url = `https://ghibliapi.vercel.app/films/${id}`; // Endpoint de Ghibli para detalle
-        const res = await fetch(url);
-        if (!res.ok) {
-          // Si la película no se encuentra (404) u otro error HTTP
-          throw new Error(`Error ${res.status}: No se pudo obtener la información de la película.`);
-        }
-        const responseData = await res.json();
-        setFilmDetail(responseData); // Guardar los detalles de la película
-      } catch (error) {
-        console.error("Error fetching Ghibli film details:", error);
-        setError(error.message); // Guardar el mensaje de error
-      } finally {
-        setLoading(false); // Terminar la carga, con éxito o error
+    if (loadingFilms) {
+      // Si el contexto aún está cargando las películas, no hacemos nada más aquí,
+      // esperamos a que el contexto termine. El renderizado condicional se encargará.
+      // Mantenemos localLoading en true.
+      return;
+    }
+
+    if (errorFilms) {
+      // Si hubo un error al cargar las películas en el contexto, lo reflejamos localmente.
+      setLocalError(`Error general al cargar datos de películas: ${errorFilms}`);
+      setLocalLoading(false);
+      return;
+    }
+
+    // Si las películas del contexto ya se cargaron y no hay error general:
+    if (films && films.length > 0) {
+      const foundFilm = films.find(film => film.id === filmIdFromParams);
+
+      if (foundFilm) {
+        setFilmDetail(foundFilm);
+        setLocalError(null);
+      } else {
+        setLocalError(`No se encontró una película con el ID: ${filmIdFromParams}`);
       }
-    };
+    } else if (!loadingFilms) {
+      // Films no está cargando, pero el array 'films' está vacío o no existe (y no hubo errorFilms)
+      setLocalError("No hay datos de películas disponibles en el contexto.");
+    }
+    setLocalLoading(false); // La búsqueda local (o intento) ha terminado
 
+    // 3. ELIMINAR el fetch individual que estaba aquí.
+    //    La lógica ahora se basa en encontrar la película en los 'films' del contexto.
+    /*
+    const obtenerDetallePelicula = async () => {
+      // ... lógica de fetch individual anterior ...
+    };
     obtenerDetallePelicula();
-  }, [id]); // El efecto se ejecuta cuando el 'id' cambia
+    */
+
+  }, [filmIdFromParams, films, loadingFilms, errorFilms]); // Dependencias del efecto
 
   // --- Renderizado Condicional ---
-  if (loading) {
-    return <div>Cargando detalles de la película...</div>; // Mensaje mientras carga
+  if (localLoading || loadingFilms) { // Considerar también loadingFilms del contexto
+    return <div className="c-detalle-mensaje">Cargando detalles de la película...</div>;
   }
 
-  if (error) {
-    return <div>Error: {error}</div>; // Mensaje si hubo un error
+  if (localError) {
+    return <div className="c-detalle-mensaje c-detalle-error">Error: {localError}</div>;
   }
 
   if (!filmDetail) {
-    // Esto no debería pasar si loading es false y no hay error, pero es una buena guarda
-    return <div>No se encontraron detalles para esta película.</div>;
+    return <div className="c-detalle-mensaje">No se encontraron detalles para esta película.</div>;
   }
 
-  // --- Renderizado de los Detalles ---
+  // --- Renderizado de los Detalles (tu código existente, prácticamente sin cambios) ---
   return (
-    // Puedes usar un div contenedor principal, quizás con una clase específica
-    <div className="c-detalle-pelicula"> {/* Cambiar/Ajustar clase CSS */}
+    <div className="c-detalle-pelicula">
       <h2>{filmDetail.title} ({filmDetail.release_date})</h2>
       <h4>{filmDetail.original_title} / {filmDetail.original_title_romanised}</h4>
 
-      {/* Puedes usar el banner como imagen principal si existe */}
       {filmDetail.movie_banner && (
-         <img
-           src={filmDetail.movie_banner}
-           alt={`Banner de ${filmDetail.title}`}
-           style={{ width: '80%', height: 'auto', marginBottom: '20px' }} // Estilo ejemplo
-         />
+        <img
+          src={filmDetail.movie_banner}
+          alt={`Banner de ${filmDetail.title}`}
+          className="c-detalle-imagen-banner" // Añadida clase para diferenciar del poster
+        />
       )}
 
       <p><strong>Director:</strong> {filmDetail.director}</p>
       <p><strong>Productor:</strong> {filmDetail.producer}</p>
       <p><strong>Puntuación Rotten Tomatoes:</strong> {filmDetail.rt_score}%</p>
+      <p className="c-detalle-descripcion"><strong>Descripción:</strong> {filmDetail.description}</p>
 
-      <p><strong>Descripción:</strong> {filmDetail.description}</p>
-
-       {/* Si quieres mostrar el poster también */}
-       {filmDetail.image && !filmDetail.movie_banner && ( // Mostrar poster si no hay banner
-          <img
-            src={filmDetail.image}
-            alt={`Poster de ${filmDetail.title}`}
-            style={{ width: '200px', height: 'auto', marginTop: '20px' }} // Estilo ejemplo
-          />
-       )}
-
-      {/* Elimina los elementos específicos de Pokémon como ID numérico, altura, peso */}
+      {filmDetail.image && (!filmDetail.movie_banner || filmDetail.movie_banner === filmDetail.image) && (
+        // Mostrar poster si no hay banner, o si el banner es la misma imagen que el poster
+        // (algunas películas en la API usan la misma URL para image y movie_banner)
+        <img
+          src={filmDetail.image}
+          alt={`Poster de ${filmDetail.title}`}
+          className="c-detalle-imagen-poster" // Añadida clase
+        />
+      )}
+      
+      {/* Aquí es donde podríamos empezar a listar Personajes, Locaciones, etc.
+        que están vinculados a esta película. Por ejemplo:
+        <h3>Personajes:</h3>
+        <ul>
+          {filmDetail.people && filmDetail.people.map(personUrl => {
+            // Aquí necesitaríamos una forma de obtener el nombre del personaje a partir de su URL
+            // o tener los datos de todos los personajes en el contexto.
+            // Por ahora, solo mostraremos la URL o un ID extraído.
+            const personId = personUrl.split('/').pop();
+            return <li key={personId}><Link to={`/personajes/${personId}`}>Personaje ID: {personId}</Link></li>;
+          })}
+          {(!filmDetail.people || filmDetail.people.length === 0 || filmDetail.people[0].includes("TODO")) && <li>No hay personajes específicos listados para esta película.</li>}
+        </ul>
+        (Similar para locations, species, vehicles)
+      */}
     </div>
   );
 }
