@@ -1,0 +1,152 @@
+/* src/Componentes/Usuario/style.css */
+
+.c-usuario-container {
+  max-width: 800px; /* Un ancho razonable para una página de perfil */
+  margin: 40px auto; /* Centrado y con margen superior/inferior */
+  padding: 30px 40px;
+  background-color: #2a2a2a; /* Similar a las tarjetas o formularios */
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  border: 1px solid #444;
+  color: #e0e0e0;
+  padding-bottom: 100px; /* Espacio para el menú fijo inferior */
+}
+
+.c-usuario-header h1 {
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 30px;
+  font-size: 2.5rem;
+  font-weight: 500;
+  /* Considera una fuente temática si tienes una */
+}
+
+.c-usuario-contenido {
+  margin-top: 20px;
+}
+
+.c-usuario-info-item {
+  display: flex;
+  justify-content: space-between; /* Alinea label a la izquierda y valor a la derecha */
+  padding: 12px 0;
+  border-bottom: 1px solid #3f3f3f; /* Separador sutil */
+  font-size: 1.1rem;
+}
+
+.c-usuario-info-item:last-child {
+  border-bottom: none; /* Quitar el borde del último ítem */
+}
+
+.c-usuario-info-label {
+  font-weight: 500;
+  color: #b0b0b0; /* Un gris más claro para el label */
+  margin-right: 15px;
+}
+
+.c-usuario-info-valor {
+  color: #f0f0f0; /* Texto del valor más brillante */
+  text-align: right; /* Alinear valor a la derecha */
+}
+
+.c-usuario-boton-logout {
+  display: block; /* Para que ocupe su propia línea y podamos centrarlo */
+  width: auto; /* Ancho automático según contenido y padding */
+  min-width: 180px; /* Ancho mínimo */
+  margin: 40px auto 0 auto; /* Centrado y con margen superior */
+  padding: 12px 25px;
+  background-color: #e53935; /* Un rojo distintivo para cerrar sesión */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.c-usuario-boton-logout:hover {
+  background-color: #c62828; /* Rojo más oscuro al pasar el cursor */
+}
+
+.c-usuario-boton-logout:active {
+  transform: scale(0.98);
+}
+
+/* Estilos para mensajes (si no están ya globales) */
+.c-usuario-mensaje {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 1.2rem;
+  color: #aaa;
+}
+
+.c-usuario-mensaje.c-usuario-error {
+  color: #ff6b6b;
+}
+
+/* Estilos para el estado de no logueado o perfil no encontrado */
+.c-usuario-no-logueado,
+.c-usuario-error-container,
+.c-usuario-no-perfil {
+  text-align: center;
+}
+
+.c-usuario-no-logueado h1,
+.c-usuario-error-container h1,
+.c-usuario-no-perfil h1 {
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.c-usuario-no-logueado p,
+.c-usuario-error-container .c-usuario-mensaje,
+.c-usuario-no-perfil .c-usuario-mensaje,
+.c-usuario-no-perfil p {
+  margin-bottom: 25px;
+  font-size: 1.1rem;
+}
+
+.c-usuario-boton-accion { /* Para el botón "Ir a Iniciar Sesión" */
+  padding: 10px 20px;
+  background-color: #81d4fa; /* Azul Ghibli */
+  color: #181818;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.c-usuario-boton-accion:hover {
+  background-color: #60c7f8;
+}
+
+/* Opcional: Estilos para un futuro formulario de actualizar username */
+/*
+.c-usuario-contenido form {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #3f3f3f;
+}
+
+.c-usuario-contenido form label {
+  display: block;
+  color: #b0b0b0;
+  margin-bottom: 8px;
+}
+
+.c-usuario-contenido form input[type="text"] {
+  width: 100%;
+  max-width: 300px; // Limitar ancho del input
+  padding: 10px;
+  background-color: #1e1e1e;
+  border: 1px solid #555;
+  border-radius: 5px;
+  color: #f0f0f0;
+  margin-bottom: 15px;
+}
+
+.c-usuario-contenido form button[type="submit"] {
+  // Reutilizar estilos de .c-usuario-boton-accion o crear nuevos
+}
+*/

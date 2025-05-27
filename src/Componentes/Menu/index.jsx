@@ -50,16 +50,6 @@ function Menu() {
               </NavLink>
             </li>
             {/* Los enlaces "Aleatorio" y "Original" los mantenemos si aún tienen sentido para tu app */}
-            <li className="c-menu-item">
-              <NavLink to="/aleatorio" className={({ isActive }) => isActive ? "c-menu-enlace c-menu-enlace-activo" : "c-menu-enlace"}>
-                Aleatorio
-              </NavLink>
-            </li>
-            <li className="c-menu-item">
-              <NavLink to="/original" className={({ isActive }) => isActive ? "c-menu-enlace c-menu-enlace-activo" : "c-menu-enlace"}>
-                Original
-              </NavLink>
-            </li>
              <li className="c-menu-item">
               <NavLink to="/usuario" className={({ isActive }) => isActive ? "c-menu-enlace c-menu-enlace-activo" : "c-menu-enlace"}>
                 Mi Perfil
