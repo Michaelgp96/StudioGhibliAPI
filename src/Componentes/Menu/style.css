@@ -1,25 +1,83 @@
-/* En src/Componentes/Menu/style.css (añadir) */
+/* src/Componentes/Menu/style.css */
 
-/* ... tus estilos existentes para .c-menu, .c-menu-lista, .c-menu-item, .c-menu-enlace ... */
+.c-menu {
+  background-color: #1c1c1c; /* Fondo oscuro para la barra del menú */
+  padding: 10px 0;          /* Padding vertical, sin padding horizontal para que ocupe todo el ancho */
+  position: fixed;          /* ESTO ES CLAVE: Fija el menú */
+  bottom: 0;                /* ESTO ES CLAVE: Lo pega a la parte inferior */
+  left: 0;                  /* Lo alinea a la izquierda */
+  width: 100%;              /* Hace que ocupe todo el ancho */
+  z-index: 1000;            /* Para asegurar que esté sobre otros elementos */
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5); /* Sombra superior para destacar */
+  text-align: center;       /* Centra la lista ul si tiene display inline-block o block con margin auto */
+}
 
-.c-menu-loading { /* Estilo para el mensaje de carga del menú si decides usarlo */
-  color: #ccc;
-  width: 100%;
+.c-menu-lista {
+  list-style-type: none;
+  margin: 0 auto; /* Centra la lista si tiene un ancho definido o es inline-block */
+  padding: 0;
+  display: flex;            /* ESTO ES CLAVE: Pone los <li> en horizontal */
+  justify-content: center;  /* Centra los <li> dentro del <ul> */
+  flex-wrap: wrap;          /* Permite que los ítems pasen a la siguiente línea si no caben */
+}
+
+.c-menu-item {
+  margin: 5px 8px; /* Espacio entre ítems del menú, ajusta según necesites */
+  /* display: flex; ya no es tan necesario aquí si los NavLink/button se estilizan bien */
+  /* align-items: center; */
+}
+
+.c-menu-enlace,
+.c-menu-boton-logout {
+  color: #b0b0b0;
+  text-decoration: none;
+  padding: 8px 12px; /* Padding para hacerlos más clickeables */
+  border-radius: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  font-size: 0.9rem; /* Ajusta el tamaño de fuente */
+  font-weight: 500;
+  display: inline-block; /* Para que el padding y text-align funcionen bien */
   text-align: center;
+  white-space: nowrap; /* Evita que el texto de los enlaces se parta en dos líneas */
+}
+
+.c-menu-enlace:hover,
+.c-menu-enlace.c-menu-enlace-activo, /* c-menu-enlace-activo lo añade NavLink */
+.c-menu-boton-logout:hover {
+  color: #ffffff;
+  background-color: #383838; /* Un fondo sutil para el ítem activo o hover */
 }
 
 .c-menu-boton-logout {
   background: none;
   border: none;
-  color: white; /* O el color de tus otros enlaces */
+  /* El padding y otros estilos los hereda de .c-menu-enlace si ambas clases están aplicadas */
   cursor: pointer;
-  padding: 0; /* Ajusta si es necesario */
-  font-size: inherit; /* Para que coincida con otros NavLinks */
-  font-family: inherit;
-  /* Aplica los mismos estilos que .c-menu-enlace si quieres que se vea igual */
+  font-family: inherit; /* Para que use la misma fuente que el resto */
 }
 
-.c-menu-boton-logout:hover {
-  text-decoration: underline; /* O el efecto hover de tus otros enlaces */
-  color: #b3e5fc; /* Ejemplo de color hover */
+/* Media Query para Móviles (para el menú inferior) */
+@media (max-width: 768px) {
+  .c-menu {
+    padding: 8px 0px; /* Reducir padding en móviles */
+  }
+
+  .c-menu-lista {
+    justify-content: center; /* Asegurar centrado */
+    /* Si hay muchos ítems y quieres scroll horizontal en vez de wrap: */
+    /* flex-wrap: nowrap; */
+    /* overflow-x: auto; */
+    /* padding-left: 10px; */ /* Para que el scroll no empiece pegado al borde */
+    /* padding-right: 10px; */
+  }
+
+  .c-menu-item {
+    margin: 3px 5px; /* Menos margen */
+  }
+
+  .c-menu-enlace,
+  .c-menu-boton-logout {
+    font-size: 0.8rem; /* Letra más pequeña */
+    padding: 6px 8px;  /* Padding más pequeño */
+  }
 }
