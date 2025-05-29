@@ -1,25 +1,26 @@
 // src/supabaseClient.js
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// --- COLOCA TUS CREDENCIALES DE SUPABASE DIRECTAMENTE AQUÍ ---
+// Asegúrate de que estas sean las URL y Clave Anon PÚBLICA correctas y actuales de tu proyecto Supabase.
+const supabaseUrl = 'https://qlvaisqkubputacoberp.supabase.co'; // Ejemplo: 'https://xyz.supabase.co'
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsdmFpc3FrdWJwdXRhY29iZXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcyMzYzMDYsImV4cCI6MjA2MjgxMjMwNn0.pUdw6KjaOivei859XQHi2NpddHrhca-1nIo-YApuApM'; // Ejemplo: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdX...'
+// --- FIN DE LAS CREDENCIALES DIRECTAS ---
 
-// MANTÉN ESTOS CONSOLE.LOG POR AHORA:
-console.log('VITE_SUPABASE_URL desde .env:', supabaseUrl);
-console.log('VITE_SUPABASE_ANON_KEY desde .env:', supabaseAnonKey);
+let supabaseInstance = null;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error("Error CRÍTICO: Variables de entorno de Supabase NO CARGADAS desde .env. Verifica tu archivo .env y los nombres de las variables (deben empezar con VITE_).");
-  // Considera no crear el cliente si estas son undefined para evitar más errores.
-  // O exportar un objeto que indique el error.
+if (!supabaseUrl || !supabaseAnonKey || supabaseUrl === 'URL_DE_TU_PROYECTO_SUPABASE_AQUI') {
+  console.error(
+    "supabaseClient.js: ¡ERROR CRÍTICO! Las credenciales de Supabase no están definidas correctamente en el código." +
+    " Reemplaza los placeholders 'URL_DE_TU_PROYECTO_SUPABASE_AQUI' y 'TU_CLAVE_ANON_PUBLIC_DE_SUPABASE_AQUI' con tus valores reales."
+  );
+} else {
+  try {
+    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey);
+    console.log("supabaseClient.js: Cliente Supabase creado exitosamente con credenciales directas.");
+  } catch (error) {
+    console.error("supabaseClient.js: Error al crear el cliente de Supabase:", error);
+  }
 }
 
-// Solo intenta crear el cliente si la URL y la clave están presentes
-export const supabase = (supabaseUrl && supabaseAnonKey) ? createClient(supabaseUrl, supabaseAnonKey) : null;
-
-if (supabase) {
-  console.log('Cliente Supabase creado exitosamente usando variables de .env');
-} else if (supabaseUrl && supabaseAnonKey) {
-  // Esto no debería pasar si createClient funciona, pero es una verificación extra
-  console.error('Error al crear el cliente Supabase a pesar de tener URL y Key.');
-}
+export const supabase = supabaseInstance;
